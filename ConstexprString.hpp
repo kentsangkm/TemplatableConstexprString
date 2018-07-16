@@ -50,20 +50,26 @@ struct ConstexprStr
     }
 };
 
-template <char... Chars>
-std::string to_string(const ConstexprStr<Chars...>& str)
+namespace std
 {
-    return str.to_string();
+    template <char... Chars>
+    std::string to_string(const ConstexprStr<Chars...>& str)
+    {
+        return str.to_string();
+    }
 }
 
 static_assert(sizeof(ConstexprStr<1,2,3,4,5>{}) == 1, "This class should always be empty class");
 static_assert(ConstexprStr<1,2,3,4,5>{}.at(1) == 2, "at() must be constexpr");
 static_assert(ConstexprStr<1,2,3,4,5>{}[2] == 3, "operator[] must be constexpr");
 
-template<std::size_t N>
-constexpr char at(const char (&str)[N], std::size_t idx)
+namespace
 {
-    return idx < N ? str[idx] : '\0';
+    template<std::size_t N>
+    constexpr char at(const char (&str)[N], std::size_t idx)
+    {
+        return idx < N ? str[idx] : '\0';
+    }
 }
 
 #define constexprStr(s)\
