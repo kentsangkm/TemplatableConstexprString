@@ -1,5 +1,14 @@
 #include "ConstexprString.hpp"
 
+template<typename NAME>
+struct Foo
+{
+    friend std::ostream& operator<< (std::ostream& os, Foo)
+    {
+        return os << NAME{};
+    }
+};
+
 int main(int argc, char *argv[])
 {
     // https://stackoverflow.com/questions/1826464/c-style-strings-as-template-arguments
@@ -11,4 +20,6 @@ int main(int argc, char *argv[])
     std::cout << longStr1 << std::endl;
     std::cout << longStr2 << std::endl;
     std::cout << (longStr1 + longStr2) << std::endl;
+    
+    std::cout << Foo<constexprStr("bar")>{} << std::endl;
 }
